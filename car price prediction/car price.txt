@@ -1,0 +1,33 @@
+@app.route('/get-car-names', methods=['GET'])
+def get_car_names():
+    company = request.args.get('company')  # Get the company name from the request
+    filtered_data = data[data['Company'] == company]  # Filter by company
+    car_names = filtered_data['Car Name'].unique().tolist()  # Get unique car names
+    return jsonify(car_names)
+
+
+
+
+document.getElementById('company-select').addEventListener('change', function() {
+  const company = this.value;
+  const carNameSelect = document.getElementById('car-name-select');
+
+  // Clear the car name dropdown
+  carNameSelect.innerHTML = '<option value="">Select</option>';
+
+  if (company) {
+    // Fetch car names for the selected company
+    fetch(`/get-car-names?company=${company}`)
+      .then(response => response.json())
+      .then(data => {
+        // Populate the car names dropdown
+        data.forEach(car => {
+          const option = document.createElement('option');
+          option.value = car;
+          option.textContent = car;
+          carNameSelect.appendChild(option);
+        });
+      })
+      .catch(error => console.error('Error fetching car names:', error));
+  }
+});
